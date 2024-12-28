@@ -1,0 +1,16 @@
+- name: Create directory for static files
+  file:
+    path: /var/www/site
+    state: directory
+    mode: '0755'
+
+- name: Install unzip
+  apt:
+    name: unzip
+    state: present
+
+- name: Copy and unarchive static files
+  unarchive:
+    src: static.zip
+    dest: /var/www/site/
+    

@@ -1,0 +1,10 @@
+- name: Manage servers
+  hosts: all
+  become: yes
+  roles:
+    - users
+    - static
+    - nginx
+    - ssh
+    - packages
+    - ohmyzsh

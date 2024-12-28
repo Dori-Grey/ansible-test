@@ -1,0 +1,32 @@
+- name: Disable root authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+
+- name: Disable empty password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitEmptyPasswords'
+    line: 'PermitEmptyPasswords no'
+
+- name: Enable verbose logging
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^LogLevel'
+    line: 'LogLevel VERBOSE'
+
+- name: Disable X11Forwarding
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^X11Forwarding'
+    line: 'X11Forwarding no'
+
+- name: enable PermitTTY
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitTTY'
+    line: 'PermitTTY yes'
+
+- name: Restart ssh
+  shell: service ssh restart

@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    # Логирование запросов
+    access_log /var/log/nginx/images_access.log;
+    error_log /var/log/nginx/images_error.log;
+
+    location /images {
+        alias /var/www/site/;
+        # Включение отображения структуры файлов
+        autoindex on;
+        autoindex_exact_size off;
+        autoindex_format html;
+
+        # Настройка кэширования
+        expires 1h;
+        add_header Cache-Control "public";
+
+        # Включение gzip для статики
+        gzip on;
+        gzip_types image/jpeg image/png image/gif;
+        gzip_proxied any;
+        gzip_min_length 256;
+
+        # Загружать файлы напрямую при обращении к ним
+        try_files $uri $uri/ =404;
+    }
+}    

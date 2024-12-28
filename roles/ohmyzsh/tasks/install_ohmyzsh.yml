@@ -1,0 +1,34 @@
+- name: Ensure zsh is installed
+  package:
+    name: 
+      - zsh
+      - curl
+    state: present
+
+- name: Check if Oh My Zsh is already installed for user {{ item.name }}
+  stat:
+    path: "/home/{{ item.name }}/.oh-my-zsh"
+  register: ohmyzsh_status
+  loop: "{{ users }}"
+
+- name: Install Oh My Zsh for each user
+  become: yes
+  become_user: "{{ item.name }}"
+  shell: |
+    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | RUNZSH=no bash
+  args:
+    chdir: "/home/{{ item.name }}"
+  when: not ohmyzsh_status.results[item_index].stat.exists
+  loop: "{{ users }}"
+  loop_control:
+    index_var: item_index
+
+- name: Set default zsh configuration
+  template:
+    src: zshrc.j2
+    dest: "/home/{{ item.name }}/.zshrc"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0644'
+  loop: "{{ users }}"
+

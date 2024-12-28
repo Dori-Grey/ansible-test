@@ -1,0 +1,9 @@
+services:
+  ubuntu:
+    build: .
+    platform: linux/arm64
+    container_name: igaming-ubuntu
+    tty: true
+    ports:
+      - 2222:22
+      - 8080:80

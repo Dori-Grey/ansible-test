@@ -1,0 +1,13 @@
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Copy nginx configuration
+  template:
+    src: site.conf.j2
+    dest: /etc/nginx/sites-available/default
+
+- name: Restart nginx
+  shell: service nginx restart

@@ -1,0 +1,33 @@
+ansible_host: 127.0.0.1
+ansible_port: 2222
+ansible_user: root
+
+custom_groups:
+  - group_name: developers
+    state: present
+    sudo: false
+  - group_name: admins
+    sudo: true
+    state: present
+
+users:
+  - name: dre
+    shell: /bin/zsh
+    state: present
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4uYYhviUk5BMn3yMILassikPcHBepndXF8VdEoDSJURga/4NdwzziRupsSVV94qYrMWq3NQxhKZ6DWdlnmQ90/XwFo4aLRZY5XUuqW9mMd7ueAQiv9qbEzJkgPRz/HA9vMPHQ5FGUebhbCPGBIm7IcZ52hTK9A40+hNIw38YFyyC7yBx7e3w8zP4It4XwP6hY0hDbCcZHOoLIeB5uBy4REC7KeVK0D//ws7/shkXJ3vb46HzKLeytPNhMs+CLfl9IW/n1Ga6xww98/aSr2IP1sFCykQgF3CByFQ0Pamip+RrWmRK5LFIUdDaJbS70Swrc6BYo3fJGBwS9bWYL3+QfHVIGQFvDTQt47YVIbqpnrRnF+3xm51eLT6eE21JvE1g8vaCFOtb29Vbh5w1DsGLDCMjSrJ9zYpzIwP3PLdvnhC1Erz6kF/y9t0ucAVj5M6VoIfQ0jkRSQKnuxDSaokim4zUcl1pnPBGXB35zj0V6O25hPg+imB2yICDHUmIldeU= dre@tests"
+    password: "{{ 'sheebie8iK6ahv' | password_hash('sha512') }}"
+    groups:
+      - developers
+  - name: ansible
+    shell: /bin/bash
+    state: present
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrNke+SJ04ACQ4nGMz6fcN/GeO3ovWdyzupadcB4Rfskt0ZjanboeUrbzRkls2Sg2Q4LG1WIkKeJF2kFs7S2wjTb+gFuNdR/2X0EEHM7SWkEaANoLtdBi2uphGDUkyUmehZ05VvQb9IPmQqJkERX0lkBVbZ1hqMKj0lbnc/Anjyr0XxOyxhgabuJdRCfouYettlQsgZ7MzlyfrTb1ZR4LweAv9cggWT2Lx65J6XrFG8X2U8ii+S8gyheERb4eXjH5L889Cn09g/1ZaN8VacsjagNRvw5zC3zv5MIZLwkob3Z5e/BfFLCwUGbfJFrmPR/iCTZS3g9Af7VisPtE8PYHscC5dragShyqLAtc2GcfDSmfyIRCU5H3SHO2uDmw9v7NMTy4g8scYOtpyb6C8zqNKUmk0ha/F8sgrFm3Qt1qZZgvokc9WXBjjvi++LL3uIYpkXgB3FZ9w1nO8tmvX0KVjllX5F66GfmNfW0KgAHybcDuKeRESw5tG6uWlyfqJ4Hs= ansible@tests"
+    password: "{{ 'juGh2oon0uph8u' | password_hash('sha512') }}"
+    groups: 
+      - admins
+
+list_install:
+  - htop
+  - ncdu
+  - git
+  - nano

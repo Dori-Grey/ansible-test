@@ -1,0 +1,48 @@
+- name: Ensure zsh is installed
+  package:
+    name: sudo
+    state: present
+
+- name: Manage custom groups
+  group:
+    name: "{{ item.group_name }}"
+    state: "{{ item.state }}"
+  loop: "{{ custom_groups }}"
+
+- name: Configure sudoers for custom groups
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ item.group_name }}"
+    content: |
+      %{{ item.group_name }} ALL=(ALL) NOPASSWD:ALL
+    owner: root
+    group: root
+    mode: '0440'
+  loop: "{{ custom_groups }}"
+  when: item.sudo == true
+
+- name: Manage users
+  user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
+    state: "{{ item.state }}"
+    password: "{{ item.password }}"
+    groups: "{{ item.groups | join(',') }}"
+  with_items: "{{ users }}"
+  when: item.state == 'present'
+
+- name: Remove users
+  user:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ users }}"
+  when: item.state == 'absent'
+
+- name: Add SSH keys for users
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: present
+  with_items: "{{ users }}"
+  when:
+    - item.state == 'present'
+    - item.ssh_key != ''
