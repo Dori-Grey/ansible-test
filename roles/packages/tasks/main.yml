@@ -1,3 +1,8 @@
+- name: Update packages
+  apt:
+    name: "*"
+    state: latest
+
 - name: Install packages
   apt:
     name: "{{ item }}"
